@@ -139,6 +139,33 @@ class Tree {
         console.log(curr.value);
         this.preOrder(queue[1]);
     }
+    height(node = this.root) {
+        if (node === null) {
+            return 0;
+        }
+
+        let height = 0;
+        let queue = [node];
+
+        while (queue.length !== 0) {
+            let levelSize = queue.length;
+
+            for (let i=0; i< levelSize; i++) {
+                let node = queue.shift();
+                if (node.left) queue.push(node.left);
+                if (node.right) queue.push(node.right);
+            }
+
+            height++;
+        }
+        console.log(height);
+        return height;
+    }
+    depth (node = this.root) {
+        const max_height = this.height();
+        console.log(max_height - this.height(node));
+        return max_height - this.height(node);
+    }
 }
 
 function sortArray(array) {
@@ -171,4 +198,5 @@ tree.insert(2);
 tree.deleteItem(9);
 console.log("Tree after deleting 9:", JSON.stringify(tree.root, null, 2));
 console.log(tree.find(8));
-tree.inOrder();
+tree.height();
+tree.height(tree.root.left);
