@@ -206,5 +206,17 @@ function buildTree(array, start, end) {
     return root;
 }
 
-let toTree = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
+let toTree = Array.from({length:100}, () => Math.floor(Math.random() * 100));
+console.log(toTree);
 let tree = new Tree(sortArray(toTree));
+console.log(tree.isBalanced());
+
+for (let i = 0; i < 30; i ++) {
+    tree.insert(Math.floor(Math.random() *100) + 100)
+}
+
+console.log(' ');
+console.log('Inserted values');
+console.log(tree.isBalanced());
+console.log(tree.rebalance());
+console.log(tree.isBalanced());
