@@ -90,9 +90,9 @@ class Tree {
     levelOrder(callback, curr = [this.root]) {
         let newqueue = [];
         for (let i=0; i<curr.length; i++) {
-            if (curr[i].value) callback(curr[i].value);
-            if (curr[i].left) newqueue.push(curr[i].left);
-            if (curr[i].right) newqueue.push(curr[i].right);
+            if (curr[i] && curr[i].value) callback(curr[i].value);
+            if (curr[i] && curr[i].left) newqueue.push(curr[i].left);
+            if (curr[i] && curr[i].right) newqueue.push(curr[i].right);
         }
         if (newqueue.length) {
             this.levelOrder(callback, newqueue);
@@ -162,6 +162,26 @@ class Tree {
         console.log(max_height - this.height(node));
         return max_height - this.height(node);
     }
+    isBalanced() {
+        let leftside = this.root.left;
+        let rightside = this.root.right;
+        let leftheight = this.height(leftside);
+        let rightheight = this.height(rightside);
+
+        const heightdiff = Math.abs(leftheight-rightheight);
+        if (heightdiff > 1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    rebalance() {
+        let treeList = [];
+        this.levelOrder(value => treeList.push(value));
+
+        const sortedList = sortArray(treeList);
+        this.root = buildTree(sortedList, 0, sortedList.length - 1);
+    }
 }
 
 function sortArray(array) {
@@ -188,6 +208,3 @@ function buildTree(array, start, end) {
 
 let toTree = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 let tree = new Tree(sortArray(toTree));
-console.log("Initial tree:", JSON.stringify(tree.root, null, 2));
-
-tree.preOrder(console.log);
