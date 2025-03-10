@@ -87,20 +87,20 @@ class Tree {
         }
         return curr;
     }
-    levelOrder(curr = [this.root]) {
+    levelOrder(callback, curr = [this.root]) {
         let newqueue = [];
         for (let i=0; i<curr.length; i++) {
-            if (curr[i].value) console.log(curr[i].value);
+            if (curr[i].value) callback(curr[i].value);
             if (curr[i].left) newqueue.push(curr[i].left);
             if (curr[i].right) newqueue.push(curr[i].right);
         }
         if (newqueue.length) {
-            this.levelOrder(newqueue);
+            this.levelOrder(callback, newqueue);
         }
     }
-    preOrder(curr = this.root) {
+    preOrder(callback, curr = this.root) {
         let queue = [];
-        console.log(curr.value);
+        callback(curr.value);
         if (curr.left) {
             queue.push(curr.left);
         }
@@ -109,10 +109,10 @@ class Tree {
         }
 
         for (let i = 0; i < queue.length; i++) {
-            this.preOrder(queue[i]);
+            this.preOrder(callback, queue[i]);
         }
     }
-    postOrder(curr = this.root) {
+    postOrder(callback, curr = this.root) {
         let queue = [];
         if (curr.left) {
             queue.push(curr.left);
@@ -122,22 +122,18 @@ class Tree {
         }
 
         for (let i = 0; i < queue.length; i++) {
-            this.preOrder(queue[i]);
+            this.postOrder(callback, queue[i]);
         }
-        console.log(curr.value);
+        callback(curr.value);
     }
-    inOrder(curr = this.root) {
-        let queue = [];
+    inOrder(callback, curr = this.root) {
         if (curr.left) {
-            queue.push(curr.left);
+            this.inOrder(callback, curr.left);
         }
+        callback(curr.value);
         if (curr.right) {
-            queue.push(curr.right);
+            this.inOrder(callback, curr.right);
         }
-
-        this.preOrder(queue[0]);
-        console.log(curr.value);
-        this.preOrder(queue[1]);
     }
     height(node = this.root) {
         if (node === null) {
@@ -194,9 +190,4 @@ let toTree = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 let tree = new Tree(sortArray(toTree));
 console.log("Initial tree:", JSON.stringify(tree.root, null, 2));
 
-tree.insert(2);
-tree.deleteItem(9);
-console.log("Tree after deleting 9:", JSON.stringify(tree.root, null, 2));
-console.log(tree.find(8));
-tree.height();
-tree.height(tree.root.left);
+tree.preOrder(console.log);
